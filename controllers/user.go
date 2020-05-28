@@ -21,6 +21,11 @@ type error interface {
 	Error() string
 }
 
+type Profile struct {
+	Name    string
+	Hobbies []string
+}
+
 var db = utils.ConnectDB()
 
 func MagaAPI(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +90,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	user := &models.User{}
 	json.NewDecoder(r.Body).Decode(user)
-
+	fmt.Println("machin")
+	fmt.Println(r.Body)
+	fmt.Println("bidule")
 	pass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println(err)
@@ -106,7 +113,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(createdUser)
 }
 
-//FetchUser function
+//FetchUsers : FetchUser function
 func FetchUsers(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
 	db.Preload("auths").Find(&users)
